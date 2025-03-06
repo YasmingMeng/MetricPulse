@@ -1,6 +1,11 @@
+/*
+ * @Description: 
+ * @Date: 2025-03-04 22:36:23
+ * @LastEditTime: 2025-03-04 22:38:47
+ */
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import "./globals.css";
+import "@/app/ui/globals.css";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",

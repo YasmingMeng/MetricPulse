@@ -1,14 +1,14 @@
 /*
  * @Description: 
  * @Date: 2024-11-11 14:23:43
- * @LastEditTime: 2025-03-31 19:03:56
+ * @LastEditTime: 2025-04-07 10:58:16
  */
-"use server";
+"use client";
 import {  z } from 'zod';
 // import { sql } from '@vercel/postgres';
 // import { revalidatePath } from 'next/cache';
 // import { redirect } from 'next/navigation';
-import { signIn } from '../../../auth';
+import { signIn } from 'next-auth/react';
  
 const LoginFormSchema = z.object({
   id: z.string(),
@@ -35,45 +35,38 @@ export type LoginState = {
   message?: string | null;
 };
 
-export async function authenticate (
-  preState: LoginState,
-  formData: FormData 
-): Promise<LoginState>{
-  // Validate form fields using Zod
+export async function authenticate(
+  prevState: LoginState,
+  formData: FormData,
+): Promise<LoginState> {
   const validatedFields = LoginConfirm.safeParse({
     username: formData.get('username'),
     password: formData.get('password'),
   });
-  console.log('...正在登录', formData, validatedFields);
+
   if (!validatedFields.success) {
     return {
       success: false,
       errors: validatedFields.error.flatten().fieldErrors,
     };
   }
+
   try {
-    const signInData: Record<string, string | number | boolean | object> = {};
-    formData.forEach((value, key) => {
-      signInData[key] = value.toString();
+    const result = await signIn('credentials', {
+      username: validatedFields.data.username,
+      password: validatedFields.data.password,
+      redirect: false,
     });
-    signInData['query'] = {
-      nextauth: 'credentials',
-      pathname: './dashboard',
-    };
-    console.log('signInData', signInData);
-     // 确保 req.query 存在
-    const result  = await signIn('credentials', signInData);
-    console.log('result', result);
-    if(result){
-      return { success: true, message: '认证成功' };
-    } else {
-      return { success: false, message: '认证失败' };
+    if (result?.error) {
+     return { success: false, message: result.error };
     }
-  } catch (error: unknown) {
-    console.error('认证失败', error);
-    if (error) {
-      return { success: false, message: '认证失败' };
+    console.log('登录成功', result);
+    return { success: true, message: '登录成功' };
+  } catch (error) {
+    console.error('登录失败:', error);
+    if (error instanceof Error) {
+      return { success: false, message: error.message };
     }
-    throw error;
+    return { success: false, message: '登录失败' };
   }
 }

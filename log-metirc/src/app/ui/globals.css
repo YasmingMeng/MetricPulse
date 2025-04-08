@@ -7,18 +7,70 @@
 
 :root {
   --background: #ffffff;
+
   --foreground: #171717;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
     --background: #0a0a0a;
+
     --foreground: #ededed;
   }
 }
 
 body {
-  color: var(--foreground);
   background: var(--background);
+  color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+.card-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  perspective: 1000px;
+}
+
+.card-face {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  transition: transform 1s;
+  backface-visibility: hidden;
+}
+
+.front {
+  transform: rotateY(0deg);
+}
+
+.back {
+  transform: rotateY(180deg);
+}
+
+.card-container.flipped .front {
+  transform: rotateY(180deg);
+}
+
+.card-container.flipped .back {
+  transform: rotateY(0deg);
+}
+
+.input-transparent {
+  @apply block w-full rounded-md px-3 py-1.5 text-base text-white 
+  outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 
+  focus:outline-2 focus:-outline-offset-2 focus:outline-blue-400 hover:outline-blue-300 
+  sm:text-sm/6 !bg-white/20 !backdrop-blur-sm;
+}
+/* 
+input {  
+  background-color: darkred; 
+}   */
+
+/* 覆盖自动填充后的样式 */  
+/* 
+input:-webkit-autofill,  
+input:-webkit-autofill:hover,  
+input:-webkit-autofill:focus {  
+background-color: darkred;
+}   */

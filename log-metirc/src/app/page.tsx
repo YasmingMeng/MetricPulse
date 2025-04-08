@@ -1,10 +1,11 @@
 /*
  * @Description: 
  * @Date: 2025-03-03 22:39:44
- * @LastEditTime: 2025-03-09 20:01:21
+ * @LastEditTime: 2025-03-11 17:01:44
  */
 import Image from "next/image";
 import Link from "next/link";
+// import '../ui/globals.css';
 
 export default function Home() {
   return (
@@ -53,7 +54,7 @@ export default function Home() {
               width={20}
               height={20}
             />
-            登录
+            开始
           </Link>
           <a
             className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#383838] dark:hover:bg-[#f2f2f2] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"

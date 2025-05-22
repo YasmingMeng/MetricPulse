@@ -1,7 +1,7 @@
 /*
  * @Description: 
  * @Date: 2025-03-28 17:23:19
- * @LastEditTime: 2025-04-07 10:56:39
+ * @LastEditTime: 2025-05-22 11:11:31
  */
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
@@ -34,25 +34,27 @@ const handler = NextAuth({
             'SELECT * FROM user_info WHERE username = $1',
             [credentials.username]
           );
+          const emailCheck = await pool.query(
+            'SELECT email FROM user_info WHERE email = $1',
+            [credentials.username]
+          );
           const user = result.rows[0];
-
-          if (!user) {
-            throw new Error('用户不存在');
+          const email = emailCheck.rows[0];
+          if (!user && !email) {
+            throw new Error('用户不存在,请先注册');
           }
-
-          const isPasswordValid = await compare(credentials.password, user.password);
-
+          const inputPassword = credentials.password.trim();
+          const isPasswordValid = await compare(inputPassword, user.password);
           if (!isPasswordValid) {
-            throw new Error('密码错误');
+            throw new Error('密码错误，请核验后重试');
           }
-
           return {
             id: user.id,
             name: user.name,
-            email: user.email
+            email: user.email,
           };
         } catch (error) {
-          console.error('认证错误1:', error);
+          console.error('认证错误2:', error);
           throw error;
         }
       }
@@ -62,13 +64,21 @@ const handler = NextAuth({
     signIn: '/login',
   },
   callbacks: {
+    // JWT 回调：在生成 JWT token 时触发
     async jwt({ token, user }) {
       if (user) {
         token.id = user.id;
       }
-      return token;
+      return token; // 返回增强后的 token
     },
+    /**
+     * @description: Session 回调：在获取会话时触发
+     * @param {any} session
+     * @param {any} token
+     * @return {*}
+     */
     async session({ session, token }) {
+      // 将 JWT 中的用户ID注入客户端可访问的 session 对象中
       if (session.user) {
         session.user.id = token.id as string;
       }

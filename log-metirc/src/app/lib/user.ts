@@ -1,13 +1,12 @@
 /*
  * @Description: 
  * @Date: 2024-11-11 14:23:43
- * @LastEditTime: 2025-04-07 10:58:16
+ * @LastEditTime: 2025-05-22 11:14:42
  */
 "use client";
 import {  z } from 'zod';
 // import { sql } from '@vercel/postgres';
 // import { revalidatePath } from 'next/cache';
-// import { redirect } from 'next/navigation';
 import { signIn } from 'next-auth/react';
  
 const LoginFormSchema = z.object({
@@ -50,20 +49,22 @@ export async function authenticate(
       errors: validatedFields.error.flatten().fieldErrors,
     };
   }
-
   try {
     const result = await signIn('credentials', {
       username: validatedFields.data.username,
       password: validatedFields.data.password,
       redirect: false,
     });
+    // 处理登陆状态
     if (result?.error) {
      return { success: false, message: result.error };
+    } else if (!result?.ok) {
+      return { success: false, message: '登录失败' };
+    } else if (result?.ok) {
+      return { success: true, message: '登录成功' };
     }
-    console.log('登录成功', result);
-    return { success: true, message: '登录成功' };
+    return { success: false, message: '登录失败' };
   } catch (error) {
-    console.error('登录失败:', error);
     if (error instanceof Error) {
       return { success: false, message: error.message };
     }

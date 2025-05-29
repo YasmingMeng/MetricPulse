@@ -1,16 +1,24 @@
 /*
  * @Description: 
  * @Date: 2025-04-07 13:46:52
- * @LastEditTime: 2025-04-07 16:41:54
+ * @LastEditTime: 2025-05-22 00:02:45
  */
 "use client";
 import { ExclamationCircleIcon } from '@heroicons/react/24/outline';
 import { LoginState } from '@/app/lib/user';
 
+// 定义登录表单组件的属性接口
 interface LoginFormProps {
+  // 表单提交处理函数，接收 FormData 参数
   formAction: (formData: FormData) => void;
+  
+  // 登录状态对象（包含 success/errors/message 等属性），允许为 null
   state: LoginState | null;
+  
+  // 是否正在处理登录请求的加载状态
   isPending: boolean;
+  
+  // 切换登录/注册表单的回调函数
   onFlip: () => void;
 }
 
@@ -22,7 +30,6 @@ export default function LoginForm({ formAction, state, isPending, onFlip }: Logi
           <label htmlFor="username" className="block text-sm/6 font-medium text-white">账号</label>
           <div className="mt-2 relative">
              <input 
-              type="email" 
               name="username" 
               id="username"
              autoComplete="off"
@@ -55,7 +62,6 @@ export default function LoginForm({ formAction, state, isPending, onFlip }: Logi
             />
           </div>
         </div>
-
         <div>
           <button 
             type="submit"
@@ -70,8 +76,8 @@ export default function LoginForm({ formAction, state, isPending, onFlip }: Logi
       <div className="flex h-8 items-end space-x-1" aria-live="polite" aria-atomic="true">
         {state?.success === false && state?.message && (
           <>
-            <ExclamationCircleIcon className="h-5 w-5 text-red-500" />
-            <p className="text-sm text-red-500">{state.message}</p>
+            <ExclamationCircleIcon className="h-5 w-5 text-red-300" />
+            <p className="text-sm text-red-300">{state.message}</p>
           </>
         )}
       </div>

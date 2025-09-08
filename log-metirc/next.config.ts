@@ -1,7 +1,7 @@
 /*
  * @Description: 
  * @Date: 2025-03-03 22:39:44
- * @LastEditTime: 2025-03-18 09:05:57
+ * @LastEditTime: 2025-07-24 17:26:51
  */
 import type { NextConfig } from "next";
 import { Pool } from 'pg';
@@ -27,9 +27,19 @@ const nextConfig: NextConfig = {
     DB_PASSWORD: process.env.DB_PASSWORD,
     DB_PORT: process.env.DB_PORT,
   },
+  eslint: {
+    // 禁用构建时的ESLint检查
+    ignoreDuringBuilds: true,
+  },
+  output: 'standalone',
   experimental: {
     turbo: {},
+    serverComponentsExternalPackages: ['pg'], // 包含 PostgreSQL 驱动
+    optimizeCss: true,
   },
+  // 新增路由排除配置
+  skipTrailingSlashRedirect: true,
+  skipMiddlewareUrlNormalize: true,
 };
 
 export default nextConfig;

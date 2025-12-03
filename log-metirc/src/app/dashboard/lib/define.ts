@@ -5,10 +5,12 @@
  */
 
  //菜单结构
-interface MenuItem {
+export interface MenuItem {
   name: string;
   href: string;
   current: boolean;
+  title?: string;
+  icon?: string;
   childrenMenu?: { name: string; href: string; current: boolean }[];
 }
 

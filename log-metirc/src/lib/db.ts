@@ -1,7 +1,7 @@
 /*
  * @Description: 
  * @Date: 2025-06-12 10:53:09
- * @LastEditTime: 2025-12-03 15:42:44
+ * @LastEditTime: 2026-01-06 16:11:09
  */
 import { Pool, PoolClient } from 'pg';
 import { getDatabaseSchema } from './db-config';
@@ -35,7 +35,7 @@ function validateDatabaseUrl(): void {
   // 验证连接字符串格式
   const url = process.env.DATABASE_URL;
   if (!url.startsWith('postgresql://') && !url.startsWith('postgres://')) {
-    console.warn('⚠️  DATABASE_URL 格式可能不正确，应以 postgresql:// 或 postgres:// 开头');
+    console.warn('DATABASE_URL 格式不正确，以 postgresql:// 或 postgres:// 开头');
   }
 }
 
@@ -81,7 +81,6 @@ basePool.on('error', (err: Error) => {
 
 // 在每个新连接建立时设置 search_path
 basePool.on('connect', async (client: PoolClient) => {
-  console.log("✅ 数据库连接成功");
   await ensureSearchPath(client);
 });
 

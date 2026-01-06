@@ -86,7 +86,7 @@ CREATE TABLE preview."main_menus" (
   menu_ename VARCHAR(100),
   icon_path VARCHAR(200),
   sort_order INT NOT NULL,
-  is_active TINYINT DEFAULT 1,
+  is_active BOOLEAN DEFAULT 1,
   created_at TIMESTAMP DEFAULT NOW()
 );
 
@@ -97,7 +97,7 @@ CREATE TABLE public."main_menus" (
   menu_ename VARCHAR(100),
   icon_path VARCHAR(200),
   sort_order INT NOT NULL,
-  is_active TINYINT DEFAULT 1,
+  is_active BOOLEAN DEFAULT 1,
   created_at TIMESTAMP DEFAULT NOW()
 );
 ```

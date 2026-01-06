@@ -17,7 +17,7 @@
 | menu_ename | VARCHAR   | 菜单英文名称           |
 | icon_path  | VARCHAR   | 图标路径               |
 | sort_order | INT       | 排序顺序               |
-| is_active  | TINYINT   | 是否激活（1=是，0=否） |
+| is_active  | BOOLEAN   | 是否激活（1=是，0=否） |
 | created_at | TIMESTAMP | 创建时间               |
 
 ## 使用方法

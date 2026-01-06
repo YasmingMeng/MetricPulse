@@ -1,14 +1,26 @@
 /*
  * @Description: 
  * @Date: 2025-06-27 11:03:28
- * @LastEditTime: 2025-07-21 10:24:09
+ * @LastEditTime: 2025-12-15 17:03:37
  */
 "use client" 
 import React from 'react';
 import {TopNavProps} from "@/app/dashboard/lib/define";
 
 export const MenuList = ({ MainMenu }: TopNavProps) => {
-  const [openMenus, setOpenMenus] = React.useState<Set<string>>(new Set(['数据中心']));
+  // 动态初始化 openMenus
+  const getInitialOpenMenus = () => {
+    const openSet = new Set<string>();
+    MainMenu.forEach(mainItem => {
+      const hasActiveChild = mainItem.childrenMenu?.some(child => child.current === true);
+      if (hasActiveChild) {
+        openSet.add(mainItem.name);
+      }
+    });
+    return openSet;
+  };
+
+  const [openMenus, setOpenMenus] = React.useState<Set<string>>(getInitialOpenMenus);
 
   const toggleMenu = (name: string) => {
     setOpenMenus(prev => {
